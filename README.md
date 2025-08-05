@@ -14,8 +14,7 @@
 - **Hoạt động Offline:** Toàn bộ dữ liệu được lưu trữ trên trình duyệt của người dùng (`localStorage`), không yêu cầu kết nối internet hay cơ sở dữ liệu backend.
 
 ## Sử dụng trực tiếp
-
-Bạn có thể truy cập và sử dụng công cụ ngay lập tức qua đường link sau:
+https://blackbird081.github.io/Dang_ky_dich_vu_container/
 
 ## Hướng dẫn chạy Local (trên máy tính cá nhân)
 
