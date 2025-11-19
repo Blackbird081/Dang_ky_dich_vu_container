@@ -7,7 +7,7 @@ const i18n = {
     formTitle: { vi: 'Thông tin chung', en: 'General Information' },
     registrationNo: { vi: 'Số đăng ký', en: 'Registration No.' },
     registrationDate: { vi: 'Ngày đăng ký', en: 'Registration Date' },
-    workingDate: { vi: 'Ngày làm hàng', en: 'Working Date' },
+    workingDate: { vi: 'Ngày dự kiến làm hàng', en: 'Estimated Working Date' },
     cargoType: { vi: 'Hàng hóa', en: 'Cargo Type' },
     containerType: { vi: 'Loại cont', en: 'Container Type' },
     customerName: { vi: 'Tên khách hàng', en: 'Customer Name' },
@@ -58,7 +58,7 @@ const i18n = {
         title: { vi: 'ĐĂNG KÝ DỊCH VỤ', en: 'SERVICE REGISTRATION' },
         registrationNo: { vi: 'Số', en: ' No.' },
         date: { vi: 'Ngày', en: 'Date' },
-        workingDate: { vi: 'Ngày làm hàng', en: 'Working Date' },
+        workingDate: { vi: 'Ngày dự kiến làm hàng', en: 'Estimated Working Date' },
         cargoType: { vi: 'Hàng hóa', en: 'Cargo' },
         containerType: { vi: 'Loại cont', en: 'Cont. Type' },
         customerName: { vi: 'Tên khách hàng', en: 'Customer Name' },
@@ -75,14 +75,21 @@ const i18n = {
         thQty: { vi: 'SL', en: 'QTY' },
         quoteNotesTitle: { vi: 'Lưu ý:', en: 'Notes:' },
         quoteNotesContent: { 
-        vi: `<li style="margin-bottom: 4px;">Chúng tôi ghi nhận theo thông tin khách hàng cung cấp, vui lòng kiểm tra lại phương án.</li><li style="margin-bottom: 4px;">Đối với phương án đóng/rút/sang container, chúng tôi không chịu trách nhiệm việc tháo gỡ, chằng buộc hàng hoá, cũng như các hư hỏng bên trong container như xước, gãy ván sàn...</li><li>Nếu hàng hoá thực tế khác thông tin ban đầu hoặc ngoài khả năng đáp ứng của thiết bị tại Cảng. Phương án làm hàng sẽ được điều chỉnh theo hiện trường.</li>`,
-        en: `<li style="margin-bottom: 4px;">We record the information based on the details provided by the customer; please review the handling plan carefully.</li><li style="margin-bottom: 4px;">For stuffing/unstuffing services, we are not responsible for lashing/unlashing or securing/unsecuring cargo, nor for any internal container damages such as scratches, broken floorboards, etc.</li><li>If the actual cargo differs from the initial information or exceeds the handling capacity of the Port’s equipment, the cargo handling plan will be adjusted according to on-site conditions.</li>`
+        vi: `<li style="margin-bottom: 4px;">Chúng tôi ghi nhận theo thông tin khách hàng cung cấp, vui lòng kiểm tra lại phương án.</li><li style="margin-bottom: 4px;">Khi thay đổi kế hoạch làm hàng: vui lòng liên hệ, báo lại thời gian mới để chúng tôi chuẩn bị phương tiện, thiết bị...</li><li style="margin-bottom: 4px;">Đối với phương án đóng/rút/sang container, chúng tôi không chịu trách nhiệm việc tháo gỡ, chằng buộc hàng hoá, cũng như các hư hỏng bên trong container như xước, gãy ván sàn...</li><li>Nếu hàng hoá thực tế khác thông tin ban đầu hoặc ngoài khả năng đáp ứng của thiết bị tại Cảng. Phương án làm hàng sẽ được điều chỉnh theo hiện trường.</li>`,
+        en: `<li style="margin-bottom: 4px;">We record the information based on the details provided by the customer; please review the handling plan carefully.</li><li style="margin-bottom: 4px;">If there are any changes to the work schedule, please contact us to provide the new time so we can prepare the necessary vehicles and equipment.</li><li style="margin-bottom: 4px;">For stuffing/unstuffing services, we are not responsible for lashing/unlashing or securing/unsecuring cargo, nor for any internal container damages such as scratches, broken floorboards, etc.</li><li>If the actual cargo differs from the initial information or exceeds the handling capacity of the Port’s equipment, the cargo handling plan will be adjusted according to on-site conditions.</li>`
     }
     }
 };
 
+const STORAGE_KEYS = {
+    APP_LANG: 'appLang',
+    LAST_REG_INFO: 'lastRegInfo',
+    SERVICES: (lang) => `tanthuan_services_${lang}`,
+    REGISTRATIONS: (lang) => `tanthuan_registrations_${lang}`
+};
+
 const state = {
-    currentLang: localStorage.getItem('appLang') || 'vi',
+    currentLang: localStorage.getItem(STORAGE_KEYS.APP_LANG) || 'vi',
     products: [],
 };
 
@@ -166,26 +173,48 @@ const hideModal = (modalElement) => { modalElement.style.display = 'none'; };
 function createTableRow() {
     const row = document.createElement('tr');
     row.className = 'item-row';
+
+    // Cell 1: Service Select
+    const serviceCell = document.createElement('td');
+    serviceCell.className = 'px-4 py-2 align-top';
+    const serviceSelect = document.createElement('select');
+    serviceSelect.className = 'product-select mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm';
     const productOptions = state.products.map(p => `<option value="${p.name}">${p.name}</option>`).join('');
     const selectOptionText = i18n.selectOption[state.currentLang];
+    serviceSelect.innerHTML = `<option value="">${selectOptionText}</option>${productOptions}`;
+    serviceCell.appendChild(serviceSelect);
+    row.appendChild(serviceCell);
 
-    row.innerHTML = `
-        <td class="px-4 py-2 align-top">
-            <select class="product-select mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm">
-                <option value="">${selectOptionText}</option>
-                ${productOptions}
-            </select>
-        </td>
-        <td class="px-4 py-2 align-top">
-            <select class="size-select mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm">
-                <option>20'</option>
-                <option>40'</option>
-                <option>45'</option>
-            </select>
-        </td>
-        <td class="px-4 py-2 align-top"><input type="number" class="qty-input mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm" value="1" min="1"></td>
-        <td class="px-2 py-2 align-top text-center"><button class="remove-row-btn text-red-500 hover:text-red-700 font-bold">×</button></td>
-    `;
+    // Cell 2: Size Select
+    const sizeCell = document.createElement('td');
+    sizeCell.className = 'px-4 py-2 align-top';
+    const sizeSelect = document.createElement('select');
+    sizeSelect.className = 'size-select mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm';
+    sizeSelect.innerHTML = `<option>20'</option><option>40'</option><option>45'</option>`;
+    sizeCell.appendChild(sizeSelect);
+    row.appendChild(sizeCell);
+
+    // Cell 3: Quantity Input
+    const qtyCell = document.createElement('td');
+    qtyCell.className = 'px-4 py-2 align-top';
+    const qtyInput = document.createElement('input');
+    qtyInput.type = 'number';
+    qtyInput.className = 'qty-input mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm';
+    qtyInput.value = '1';
+    qtyInput.min = '1';
+    qtyCell.appendChild(qtyInput);
+    row.appendChild(qtyCell);
+
+    // Cell 4: Remove Button
+    const removeCell = document.createElement('td');
+    removeCell.className = 'px-2 py-2 align-top text-center';
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'remove-row-btn text-red-500 hover:text-red-700 font-bold';
+    removeBtn.textContent = '×';
+    removeCell.appendChild(removeBtn);
+    row.appendChild(removeCell);
+
     elements.tableBody.appendChild(row);
 }
 
@@ -239,7 +268,7 @@ function renderProductManagementTable() {
 }
 
 function renderHistoryTable() { 
-    let savedRegistrations = JSON.parse(localStorage.getItem(`tanthuan_registrations_${state.currentLang}`)) || []; 
+    let savedRegistrations = JSON.parse(localStorage.getItem(STORAGE_KEYS.REGISTRATIONS(state.currentLang))) || []; 
     savedRegistrations.sort((a, b) => b.id.localeCompare(a.id)); 
     elements.historyTableBody.innerHTML = savedRegistrations.length === 0 ? `<tr><td colspan="5" class="text-center p-4">Không tìm thấy dữ liệu.</td></tr>` : ''; 
     savedRegistrations.forEach(q => { 
@@ -302,7 +331,7 @@ function translateUI() {
 
 // --- 5. DATA MANAGEMENT (LocalStorage) ---
 function saveProducts() { 
-    localStorage.setItem(`tanthuan_services_${state.currentLang}`, JSON.stringify(state.products)); 
+    localStorage.setItem(STORAGE_KEYS.SERVICES(state.currentLang), JSON.stringify(state.products)); 
 }
 
 function loadProducts() {
@@ -310,7 +339,7 @@ function loadProducts() {
         vi: [ { name: 'Vận chuyển container nội bộ Cảng', unit: 'cont' }, { name: 'Đóng hàng cont => xe', unit: 'cont' }, { name: 'Rút hàng xe => cont', unit: 'cont' } ],
         en: [ { name: 'Internal container transport', unit: 'cont' }, { name: 'Stuffing from container to truck', unit: 'cont' }, { name: 'Unstuffing from truck to container', unit: 'cont' } ]
     };
-    state.products = JSON.parse(localStorage.getItem(`tanthuan_services_${state.currentLang}`)) || defaultProducts[state.currentLang];
+    state.products = JSON.parse(localStorage.getItem(STORAGE_KEYS.SERVICES(state.currentLang))) || defaultProducts[state.currentLang];
 }
 
 function validateForm() {
@@ -342,15 +371,15 @@ function saveRegistration() {
         })).filter(item => item.name)
     };
 
-    let savedRegistrations = JSON.parse(localStorage.getItem(`tanthuan_registrations_${state.currentLang}`)) || [];
+    let savedRegistrations = JSON.parse(localStorage.getItem(STORAGE_KEYS.REGISTRATIONS(state.currentLang))) || [];
     savedRegistrations.push(newRegistration);
-    localStorage.setItem(`tanthuan_registrations_${state.currentLang}`, JSON.stringify(savedRegistrations));
+    localStorage.setItem(STORAGE_KEYS.REGISTRATIONS(state.currentLang), JSON.stringify(savedRegistrations));
 
     showToast(i18n.toastSaveSuccess[state.currentLang].replace('{name}', newRegistration.customerName));
 }
 
 function loadRegistration(id) { 
-    let savedRegistrations = JSON.parse(localStorage.getItem(`tanthuan_registrations_${state.currentLang}`)) || []; 
+    let savedRegistrations = JSON.parse(localStorage.getItem(STORAGE_KEYS.REGISTRATIONS(state.currentLang))) || []; 
     const q = savedRegistrations.find(q => q.id === id); 
     if (!q) { showToast('Không tìm thấy phiếu đăng ký!', 'error'); return; } 
     
@@ -387,8 +416,8 @@ function loadRegistration(id) {
 }
 
 function deleteRegistration(id) { 
-    let savedRegistrations = JSON.parse(localStorage.getItem(`tanthuan_registrations_${state.currentLang}`)) || []; 
-    localStorage.setItem(`tanthuan_registrations_${state.currentLang}`, JSON.stringify(savedRegistrations.filter(q => q.id !== id))); 
+    let savedRegistrations = JSON.parse(localStorage.getItem(STORAGE_KEYS.REGISTRATIONS(state.currentLang))) || []; 
+    localStorage.setItem(STORAGE_KEYS.REGISTRATIONS(state.currentLang), JSON.stringify(savedRegistrations.filter(q => q.id !== id))); 
     showToast(i18n.toastDeleteSuccess[state.currentLang], 'info'); 
 }
 
@@ -398,14 +427,14 @@ function generateNextRegistrationNumber() {
     const month = String(today.getMonth() + 1).padStart(2, '0');
     const dateStr = `${day}${month}`;
     
-    let lastRegInfo = JSON.parse(localStorage.getItem('lastRegInfo')) || { date: '', counter: 0 };
+    let lastRegInfo = JSON.parse(localStorage.getItem(STORAGE_KEYS.LAST_REG_INFO)) || { date: '', counter: 0 };
     
     let counter = 1;
     if (lastRegInfo.date === dateStr) {
         counter = lastRegInfo.counter + 1;
     }
     
-    localStorage.setItem('lastRegInfo', JSON.stringify({ date: dateStr, counter: counter }));
+    localStorage.setItem(STORAGE_KEYS.LAST_REG_INFO, JSON.stringify({ date: dateStr, counter: counter }));
     
     const prefix = 'ĐK';
     return `${prefix}${dateStr}-${String(counter).padStart(3, '0')}`;
@@ -520,7 +549,7 @@ async function renderPreviewToCanvas() {
         const ctx = elements.previewCanvas.getContext('2d'); 
         ctx.drawImage(canvas, 0, 0, elements.previewCanvas.width, elements.previewCanvas.height); 
     } catch (error) { 
-        showToast('Lỗi tạo bản xem trước. Kiểm tra Console (F12).', 'error'); 
+        showToast(i18n.toastError[state.currentLang], 'error'); 
         console.error("html2canvas error (Preview):", error); 
     } 
 }
@@ -543,7 +572,7 @@ async function generatePdf() {
         doc.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST');
         doc.output('dataurlnewwindow'); 
     } catch (error) { 
-        showToast('Lỗi tạo PDF. Kiểm tra Console (F12).', 'error'); 
+        showToast(i18n.toastError[state.currentLang], 'error'); 
         console.error("html2canvas error (PDF Export):", error); 
     } finally {
         elements.generatePdfBtn.disabled = false; 
@@ -553,7 +582,7 @@ async function generatePdf() {
 // --- 7. EVENT HANDLERS ---
 function handleLangToggle() {
     state.currentLang = state.currentLang === 'vi' ? 'en' : 'vi';
-    localStorage.setItem('appLang', state.currentLang);
+    localStorage.setItem(STORAGE_KEYS.APP_LANG, state.currentLang);
     loadProducts();
     resetForm(false);
     translateUI();
