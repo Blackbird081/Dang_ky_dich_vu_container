@@ -43,12 +43,21 @@
                     <div><label id="label-address" class="block text-sm font-medium text-gray-700"></label><input type="text" id="customer-address" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"></div>
                     <div><label id="label-phone" class="block text-sm font-medium text-gray-700"></label><input type="text" id="customer-phone" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"></div>
                     <div><label id="label-working-date" class="block text-sm font-medium text-gray-700"></label><input type="text" id="working-date" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"></div>
+                    <div><label id="label-leave-date" class="block text-sm font-medium text-gray-700"></label><input type="text" id="leave-date" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"></div>
                     <div id="cargo-type-container">
                         <label id="label-cargo-type" class="block text-sm font-medium text-gray-700"></label>
                         <select id="cargo-type-select" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"></select>
                         <input type="text" id="cargo-type-other" class="mt-2 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm" style="display: none;">
                     </div>
-                    <div><label id="label-container-type" class="block text-sm font-medium text-gray-700"></label><input type="text" id="container-type" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"></div>
+                    <div>
+                        <label id="label-container-type" class="block text-sm font-medium text-gray-700"></label>
+                        <select id="container-type" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm">
+                            <option value="">----</option>
+                            <option value="Xe">Xe</option>
+                            <option value="Ghe">Ghe</option>
+                            <option value="Salan">Salan</option>
+                        </select>
+                    </div>
                     <div class="md:col-span-2"><label id="label-notes" class="block text-sm font-medium text-gray-700"></label><input type="text" id="customer-notes" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"></div>
                 </div>
 
@@ -56,9 +65,11 @@
                     <table class="min-w-full divide-y divide-gray-200" id="items-table">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th id="th-service" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
-                                <th id="th-size-type" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-24"></th>
-                                <th id="th-qty" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-24"></th>
+                                <th id="th-service" class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[200px]"></th>
+                                <th id="th-size-type" class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-20"></th>
+                                <th id="th-qty" class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-16"></th>
+                                <th id="th-manifest" class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-20"></th>
+                                <th id="th-total" class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-20"></th>
                                 <th class="px-2 py-2 w-10"></th>
                             </tr>
                         </thead>

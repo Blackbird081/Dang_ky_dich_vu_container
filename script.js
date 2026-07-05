@@ -7,16 +7,19 @@ const i18n = {
     formTitle: { vi: 'Thông tin chung', en: 'General Information' },
     registrationNo: { vi: 'Số đăng ký', en: 'Registration No.' },
     registrationDate: { vi: 'Ngày đăng ký', en: 'Registration Date' },
-    workingDate: { vi: 'Ngày dự kiến làm hàng', en: 'Estimated Working Date' },
+    workingDate: { vi: 'Thời gian cập cảng', en: 'ETA' },
+    leaveDate: { vi: 'Thời gian rời cảng', en: 'ETD' },
     cargoType: { vi: 'Hàng hóa', en: 'Cargo Type' },
-    containerType: { vi: 'Loại cont', en: 'Container Type' },
+    containerType: { vi: 'Phương tiện', en: 'Transport Type' },
     customerName: { vi: 'Tên khách hàng', en: 'Customer Name' },
     address: { vi: 'Địa chỉ', en: 'Address' },
     phone: { vi: 'Điện thoại', en: 'Phone' },
     notes: { vi: 'Ghi chú', en: 'Notes' },
     thService: { vi: 'Phương án', en: 'Service' },
     thSizeType: { vi: 'Size', en: 'Size' },
-    thQty: { vi: 'Số lượng', en: 'Quantity' },
+    thQty: { vi: 'SL', en: 'Qty' },
+    thManifest: { vi: 'Manifest', en: 'Manifest Wt' },
+    thTotal: { vi: 'Total', en: 'Total Wt' },
     addRow: { vi: '+ Thêm dòng', en: '+ Add Row' },
     actionsTitle: { vi: 'Xem trước', en: 'Preview' },
     newRegistration: { vi: 'Tạo mới', en: 'New' },
@@ -58,9 +61,10 @@ const i18n = {
         title: { vi: 'ĐĂNG KÝ DỊCH VỤ', en: 'SERVICE REGISTRATION' },
         registrationNo: { vi: 'Số', en: ' No.' },
         date: { vi: 'Ngày', en: 'Date' },
-        workingDate: { vi: 'Ngày dự kiến làm hàng', en: 'Estimated Working Date' },
+        workingDate: { vi: 'Thời gian cập cảng', en: 'ETA' },
+        leaveDate: { vi: 'Thời gian rời cảng', en: 'ETD' },
         cargoType: { vi: 'Hàng hóa', en: 'Cargo' },
-        containerType: { vi: 'Loại cont', en: 'Cont. Type' },
+        containerType: { vi: 'Phương tiện', en: 'Transport Type' },
         customerName: { vi: 'Tên khách hàng', en: 'Customer Name' },
         companyName: { vi: 'TTĐH KHAI THÁC TÂN THUẬN', en: 'TAN THUAN OPERATIONS CENTER' },
         companyAddress: { vi: 'Địa chỉ: 18B Lưu Trọng Lư, P. Tân Thuận, TP. HCM', en: 'Address: 18B Luu Trong Lu, Tan Thuan Ward, HCMC' },
@@ -75,8 +79,8 @@ const i18n = {
         thQty: { vi: 'SL', en: 'QTY' },
         quoteNotesTitle: { vi: 'Lưu ý:', en: 'Notes:' },
         quoteNotesContent: { 
-        vi: `<li style="margin-bottom: 4px;">Chúng tôi ghi nhận theo thông tin khách hàng cung cấp, vui lòng kiểm tra lại phương án.</li><li style="margin-bottom: 4px;">Khi thay đổi kế hoạch làm hàng: vui lòng liên hệ, báo lại thời gian mới để chúng tôi chuẩn bị phương tiện, thiết bị...</li><li style="margin-bottom: 4px;">Đối với phương án đóng/rút/sang container, chúng tôi không chịu trách nhiệm việc tháo gỡ, chằng buộc hàng hoá, cũng như các hư hỏng bên trong container như xước, gãy ván sàn...</li><li>Nếu hàng hoá thực tế khác thông tin ban đầu hoặc ngoài khả năng đáp ứng của thiết bị tại Cảng. Phương án làm hàng sẽ được điều chỉnh theo hiện trường.</li>`,
-        en: `<li style="margin-bottom: 4px;">We record the information based on the details provided by the customer; please review the handling plan carefully.</li><li style="margin-bottom: 4px;">If there are any changes to the work schedule, please contact us to provide the new time so we can prepare the necessary vehicles and equipment.</li><li style="margin-bottom: 4px;">For stuffing/unstuffing services, we are not responsible for lashing/unlashing or securing/unsecuring cargo, nor for any internal container damages such as scratches, broken floorboards, etc.</li><li>If the actual cargo differs from the initial information or exceeds the handling capacity of the Port’s equipment, the cargo handling plan will be adjusted according to on-site conditions.</li>`
+        vi: `<li style="margin-bottom: 4px; list-style-type: none;"><span style="color: #28a745; margin-right: 5px;">✔</span>Chúng tôi ghi nhận theo thông tin khách hàng cung cấp, vui lòng kiểm tra lại phương án.</li><li style="margin-bottom: 4px; list-style-type: none;"><span style="color: #28a745; margin-right: 5px;">✔</span>Khi thay đổi kế hoạch làm hàng: vui lòng liên hệ, báo lại thời gian mới để chúng tôi chuẩn bị phương tiện, thiết bị...</li><li style="margin-bottom: 4px; list-style-type: none;"><span style="color: #28a745; margin-right: 5px;">✔</span>Đối với phương án đóng/rút/sang container, chúng tôi không chịu trách nhiệm việc tháo gỡ, chằng buộc hàng hoá, cũng như các hư hỏng bên trong container như xước, gãy ván sàn...</li><li style="list-style-type: none;"><span style="color: #28a745; margin-right: 5px;">✔</span>Nếu hàng hoá thực tế khác thông tin ban đầu hoặc ngoài khả năng đáp ứng của thiết bị tại Cảng. Phương án làm hàng sẽ được điều chỉnh theo hiện trường.</li>`,
+        en: `<li style="margin-bottom: 4px; list-style-type: none;"><span style="color: #28a745; margin-right: 5px;">✔</span>We record the information based on the details provided by the customer; please review the handling plan carefully.</li><li style="margin-bottom: 4px; list-style-type: none;"><span style="color: #28a745; margin-right: 5px;">✔</span>If there are any changes to the work schedule, please contact us to provide the new time so we can prepare the necessary vehicles and equipment.</li><li style="margin-bottom: 4px; list-style-type: none;"><span style="color: #28a745; margin-right: 5px;">✔</span>For stuffing/unstuffing services, we are not responsible for lashing/unlashing or securing/unsecuring cargo, nor for any internal container damages such as scratches, broken floorboards, etc.</li><li style="list-style-type: none;"><span style="color: #28a745; margin-right: 5px;">✔</span>If the actual cargo differs from the initial information or exceeds the handling capacity of the Port’s equipment, the cargo handling plan will be adjusted according to on-site conditions.</li>`
     }
     }
 };
@@ -106,6 +110,7 @@ const elements = {
     customerAddress: document.getElementById('customer-address'),
     customerPhone: document.getElementById('customer-phone'),
     workingDate: document.getElementById('working-date'),
+    leaveDate: document.getElementById('leave-date'),
     cargoTypeSelect: document.getElementById('cargo-type-select'),
     cargoTypeOther: document.getElementById('cargo-type-other'),
     containerType: document.getElementById('container-type'),
@@ -138,6 +143,7 @@ const elements = {
     labelRegistrationNo: document.getElementById('label-registration-no'),
     labelRegistrationDate: document.getElementById('label-registration-date'),
     labelWorkingDate: document.getElementById('label-working-date'),
+    labelLeaveDate: document.getElementById('label-leave-date'),
     labelCargoType: document.getElementById('label-cargo-type'),
     labelContainerType: document.getElementById('label-container-type'),
     labelCustomerName: document.getElementById('label-customer-name'),
@@ -147,6 +153,8 @@ const elements = {
     thService: document.getElementById('th-service'),
     thSizeType: document.getElementById('th-size-type'),
     thQty: document.getElementById('th-qty'),
+    thManifest: document.getElementById('th-manifest'),
+    thTotal: document.getElementById('th-total'),
     actionsTitle: document.getElementById('actions-title'),
     previewPlaceholder: document.getElementById('preview-placeholder'),
     modalProductTitle: document.getElementById('modal-product-title'),
@@ -189,7 +197,7 @@ function createTableRow() {
     const sizeCell = document.createElement('td');
     sizeCell.className = 'px-4 py-2 align-top';
     const sizeSelect = document.createElement('select');
-    sizeSelect.className = 'size-select mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm';
+    sizeSelect.className = 'size-select mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm text-center';
     sizeSelect.innerHTML = `<option>20'</option><option>40'</option><option>45'</option>`;
     sizeCell.appendChild(sizeSelect);
     row.appendChild(sizeCell);
@@ -199,15 +207,45 @@ function createTableRow() {
     qtyCell.className = 'px-4 py-2 align-top';
     const qtyInput = document.createElement('input');
     qtyInput.type = 'number';
-    qtyInput.className = 'qty-input mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm';
+    qtyInput.className = 'qty-input mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm text-center';
     qtyInput.value = '1';
     qtyInput.min = '1';
     qtyCell.appendChild(qtyInput);
     row.appendChild(qtyCell);
+    
+    // Cell 4: Manifest Input
+    const manifestCell = document.createElement('td');
+    manifestCell.className = 'px-4 py-2 align-top';
+    const manifestInput = document.createElement('input');
+    manifestInput.type = 'number';
+    manifestInput.className = 'manifest-input mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm text-center';
+    manifestInput.value = '';
+    manifestInput.min = '0';
+    manifestInput.step = '1';
+    manifestCell.appendChild(manifestInput);
+    row.appendChild(manifestCell);
 
-    // Cell 4: Remove Button
+    // Cell 5: Total Display
+    const totalCell = document.createElement('td');
+    totalCell.className = 'px-4 py-2 align-middle text-center font-bold text-sm';
+    const totalDisplay = document.createElement('span');
+    totalDisplay.className = 'total-display';
+    totalDisplay.textContent = '0';
+    totalCell.appendChild(totalDisplay);
+    row.appendChild(totalCell);
+
+    // Event listener for calculation
+    const calculateTotal = () => {
+        const qty = parseFloat(qtyInput.value) || 0;
+        const manifest = parseFloat(manifestInput.value) || 0;
+        totalDisplay.textContent = (qty * manifest).toLocaleString();
+    };
+    qtyInput.addEventListener('input', calculateTotal);
+    manifestInput.addEventListener('input', calculateTotal);
+
+    // Cell 6: Remove Button
     const removeCell = document.createElement('td');
-    removeCell.className = 'px-2 py-2 align-top text-center';
+    removeCell.className = 'px-2 py-2 align-middle text-center';
     const removeBtn = document.createElement('button');
     removeBtn.type = 'button';
     removeBtn.className = 'remove-row-btn text-red-500 hover:text-red-700 font-bold';
@@ -293,6 +331,7 @@ function translateUI() {
     elements.labelRegistrationNo.textContent = i18n.registrationNo[state.currentLang];
     elements.labelRegistrationDate.textContent = i18n.registrationDate[state.currentLang];
     elements.labelWorkingDate.textContent = i18n.workingDate[state.currentLang];
+    if(elements.labelLeaveDate) elements.labelLeaveDate.textContent = i18n.leaveDate[state.currentLang];
     elements.labelCargoType.textContent = i18n.cargoType[state.currentLang];
     elements.labelContainerType.textContent = i18n.containerType[state.currentLang];
     elements.labelCustomerName.textContent = i18n.customerName[state.currentLang];
@@ -302,6 +341,8 @@ function translateUI() {
     elements.thService.textContent = i18n.thService[state.currentLang];
     elements.thSizeType.textContent = i18n.thSizeType[state.currentLang];
     elements.thQty.textContent = i18n.thQty[state.currentLang];
+    if(elements.thManifest) elements.thManifest.textContent = i18n.thManifest[state.currentLang];
+    if(elements.thTotal) elements.thTotal.textContent = i18n.thTotal[state.currentLang];
     elements.addRowBtn.textContent = i18n.addRow[state.currentLang];
     elements.actionsTitle.textContent = i18n.actionsTitle[state.currentLang];
     elements.newBtn.textContent = i18n.newRegistration[state.currentLang];
@@ -361,6 +402,7 @@ function saveRegistration() {
         customerAddress: elements.customerAddress.value,
         customerPhone: elements.customerPhone.value,
         workingDate: elements.workingDate.value,
+        leaveDate: elements.leaveDate.value,
         cargoType: getCargoValue(),
         containerType: elements.containerType.value,
         customerNotes: elements.customerNotes.value,
@@ -368,6 +410,7 @@ function saveRegistration() {
             name: row.querySelector('.product-select').value,
             size: row.querySelector('.size-select').value,
             quantity: row.querySelector('.qty-input').value,
+            manifest: row.querySelector('.manifest-input').value,
         })).filter(item => item.name)
     };
 
@@ -388,7 +431,8 @@ function loadRegistration(id) {
     elements.customerName.value = q.customerName; 
     elements.customerAddress.value = q.customerAddress; 
     elements.customerPhone.value = q.customerPhone; 
-    elements.workingDate.value = q.workingDate;
+    elements.workingDate.value = q.workingDate || '';
+    elements.leaveDate.value = q.leaveDate || '';
     elements.containerType.value = q.containerType;
     elements.customerNotes.value = q.customerNotes; 
     
@@ -411,6 +455,8 @@ function loadRegistration(id) {
         lastRow.querySelector('.product-select').value = item.name; 
         lastRow.querySelector('.size-select').value = item.size;
         lastRow.querySelector('.qty-input').value = item.quantity; 
+        if(item.manifest) lastRow.querySelector('.manifest-input').value = item.manifest;
+        lastRow.querySelector('.qty-input').dispatchEvent(new Event('input'));
     }); 
     showToast(i18n.toastLoadSuccess[state.currentLang].replace('{name}', q.customerName)); 
 }
@@ -462,14 +508,19 @@ function generateA4HTML() {
         const unit = product ? product.unit : '';
         const size = row.querySelector('.size-select').value;
         const qty = row.querySelector('.qty-input').value;
+        const manifest = row.querySelector('.manifest-input').value || '';
+        const total = (parseFloat(qty) || 0) * (parseFloat(manifest) || 0);
 
         itemsHTML += `
             <tr class="border-b">
                 <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">${index + 1}</td>
-                <td style="padding: 8px; border: 1px solid #ccc; word-break: break-word; white-space: normal;">${productName}</td>
+                <td style="padding: 8px; border: 1px solid #ccc; word-break: break-word; white-space: normal; font-weight: bold;">${productName}</td>
                 <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">${size}</td>
                 <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">${unit}</td>
-                <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">${qty}</td>
+                <td style="padding: 8px; border: 1px solid #ccc; text-align: center; font-weight: bold; color: #d32f2f;">${qty}</td>
+                <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">tấn</td>
+                <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">${manifest}</td>
+                <td style="padding: 8px; border: 1px solid #ccc; text-align: center; font-weight: bold;">${total ? total.toLocaleString() : '0'}</td>
             </tr>
         `;
     });
@@ -486,7 +537,7 @@ function generateA4HTML() {
                             <h3 style="font-size: 1.125rem; font-weight: 700; margin:0 0 5px 0;">${pdfText.companyName[state.currentLang]}</h3>
                             <p style="margin: 0; font-size: 10pt;">${pdfText.phone[state.currentLang]}: 0901196093</p>
                             <p style="margin: 0; font-size: 10pt;">${pdfText.companyAddress[state.currentLang]}</p>
-                            <p style="margin: 0; font-size: 10pt;">${pdfText.email[state.currentLang]}: doc@tanthuanport.vn</p>
+                            <p style="margin: 0; font-size: 10pt;">${pdfText.email[state.currentLang]}: doc.tt@saigonport.vn</p>
                         </div>
                     </td>
                     <td style="width: 40%; vertical-align: top; text-align: right;">
@@ -501,12 +552,13 @@ function generateA4HTML() {
             </div>
             
             <table style="width: 100%; border-collapse: collapse; margin-bottom: 1.2rem; font-size: 11pt;">
-                 <tr><td style="padding: 2px 0; width: 15%; font-weight: bold; white-space: nowrap; vertical-align: top;">${pdfText.customerName[state.currentLang]}:</td><td style="padding: 2px 0;">${elements.customerName.value}</td></tr>
-                 <tr><td style="padding: 2px 0; width: 15%; font-weight: bold; white-space: nowrap; vertical-align: top;">${pdfText.address[state.currentLang]}:</td><td style="padding: 2px 0;">${elements.customerAddress.value}</td></tr>
-                 <tr><td style="padding: 2px 0; width: 15%; font-weight: bold; white-space: nowrap; vertical-align: top;">${pdfText.phone[state.currentLang]}:</td><td style="padding: 2px 0;">${elements.customerPhone.value}</td></tr>
-                 <tr><td style="padding: 2px 0; width: 15%; font-weight: bold; white-space: nowrap; vertical-align: top;">${pdfText.workingDate[state.currentLang]}:</td><td style="padding: 2px 0;">${elements.workingDate.value}</td></tr>
+                 <tr><td style="padding: 2px 0; width: 15%; font-weight: bold; white-space: nowrap; vertical-align: top;">${pdfText.customerName[state.currentLang]}:</td><td style="padding: 2px 0;">${elements.customerName.value || '...'}</td></tr>
+                 <tr><td style="padding: 2px 0; width: 15%; font-weight: bold; white-space: nowrap; vertical-align: top;">${pdfText.address[state.currentLang]}:</td><td style="padding: 2px 0;">${elements.customerAddress.value || '...'}</td></tr>
+                 <tr><td style="padding: 2px 0; width: 15%; font-weight: bold; white-space: nowrap; vertical-align: top;">${pdfText.phone[state.currentLang]}:</td><td style="padding: 2px 0;">${elements.customerPhone.value || '...'}</td></tr>
+                 <tr><td style="padding: 2px 0; width: 15%; font-weight: bold; white-space: nowrap; vertical-align: top;">${pdfText.workingDate[state.currentLang]}:</td><td style="padding: 2px 0; color: #d32f2f; font-weight: bold;">${elements.workingDate.value || '...'}</td></tr>
+                 <tr><td style="padding: 2px 0; width: 15%; font-weight: bold; white-space: nowrap; vertical-align: top;">${pdfText.leaveDate[state.currentLang]}:</td><td style="padding: 2px 0; color: #d32f2f; font-weight: bold;">${elements.leaveDate.value || '...'}</td></tr>
                  <tr><td style="padding: 2px 0; width: 15%; font-weight: bold; white-space: nowrap; vertical-align: top;">${pdfText.cargoType[state.currentLang]}:</td><td style="padding: 2px 0;">${cargoToDisplay}</td></tr>
-                 <tr><td style="padding: 2px 0; width: 15%; font-weight: bold; white-space: nowrap; vertical-align: top;">${pdfText.containerType[state.currentLang]}:</td><td style="padding: 2px 0;">${elements.containerType.value}</td></tr>
+                 <tr><td style="padding: 2px 0; width: 15%; font-weight: bold; white-space: nowrap; vertical-align: top;">${pdfText.containerType[state.currentLang]}:</td><td style="padding: 2px 0;">${elements.containerType.value || '----'}</td></tr>
                  <tr><td style="padding: 2px 0; width: 15%; font-weight: bold; white-space: nowrap; vertical-align: top;">${pdfText.notes[state.currentLang]}:</td><td style="padding: 2px 0; word-break: break-word; white-space: normal;">${elements.customerNotes.value}</td></tr>
             </table>
 
@@ -514,10 +566,13 @@ function generateA4HTML() {
                 <thead style="background-color: #e0e0e0 !important; -webkit-print-color-adjust: exact;">
                     <tr>
                         <th style="width: 5%; text-align: center; padding: 8px; border: 1px solid #ccc;">${pdfText.thNo[state.currentLang]}</th>
-                        <th style="width: 55%; text-align: left; padding: 8px; border: 1px solid #ccc;">${pdfText.thService[state.currentLang]}</th>
-                        <th style="width: 15%; text-align: center; padding: 8px; border: 1px solid #ccc;">${pdfText.thSize[state.currentLang]}</th>
+                        <th style="width: 35%; text-align: center; padding: 8px; border: 1px solid #ccc;">${pdfText.thService[state.currentLang]}</th>
+                        <th style="width: 10%; text-align: center; padding: 8px; border: 1px solid #ccc;">${pdfText.thSize[state.currentLang]}</th>
                         <th style="width: 10%; text-align: center; padding: 8px; border: 1px solid #ccc;">${pdfText.thUnit[state.currentLang]}</th>
-                        <th style="width: 15%; text-align: center; padding: 8px; border: 1px solid #ccc;">${pdfText.thQty[state.currentLang]}</th>
+                        <th style="width: 10%; text-align: center; padding: 8px; border: 1px solid #ccc;">${pdfText.thQty[state.currentLang]}</th>
+                        <th style="width: 10%; text-align: center; padding: 8px; border: 1px solid #ccc;">${pdfText.thUnit[state.currentLang]}</th>
+                        <th style="width: 10%; text-align: center; padding: 8px; border: 1px solid #ccc;">${i18n.thManifest[state.currentLang]}</th>
+                        <th style="width: 10%; text-align: center; padding: 8px; border: 1px solid #ccc;">${i18n.thTotal[state.currentLang]} (tấn)</th>
                     </tr>
                 </thead>
                 <tbody>${itemsHTML}</tbody>
@@ -746,6 +801,7 @@ function init(showWelcome = true) {
 
     flatpickr(elements.registrationDate, dateTimeOptions);
     flatpickr(elements.workingDate, dateTimeOptions);
+    flatpickr(elements.leaveDate, dateTimeOptions);
 
     elements.registrationNumber.value = generateNextRegistrationNumber();
     if (showWelcome) {
