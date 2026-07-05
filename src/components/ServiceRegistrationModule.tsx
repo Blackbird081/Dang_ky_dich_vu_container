@@ -8,8 +8,8 @@ import * as S from '../styles/S';
 import type { RegistrationServiceItem, RegistrationLineItem, RegistrationHistoryItem } from '../types';
 
 const STORAGE_KEYS = {
-  TARIFF: 'tanthuan_dkdv_tariff',
-  REGISTRATIONS: 'tanthuan_dkdv_registrations',
+  TARIFF: (lang: string) => `tanthuan_dkdv_tariff_${lang}`,
+  REGISTRATIONS: (lang: string) => `tanthuan_dkdv_registrations_${lang}`,
 };
 
 const cBtnStyle = (bg: string, disabled = false): React.CSSProperties => ({
@@ -73,14 +73,6 @@ const CARGO_MAP: Record<string, { vi: string, en: string }> = {
   'Phương án khác': { vi: 'Phương án khác', en: 'Other Cargo' }
 };
 
-const SERVICE_MAP: Record<string, { vi: string, en: string }> = {
-  'Vận chuyển cont nội bộ Cảng': { vi: 'Vận chuyển cont nội bộ Cảng', en: 'Internal container transport' },
-  'Đóng hàng cont => xe': { vi: 'Đóng hàng cont => xe', en: 'Stuffing from container to truck' },
-  'Rút hàng xe => cont': { vi: 'Rút hàng xe => cont', en: 'Unstuffing from truck to container' },
-  'Đóng hàng từ Sà lan => Container': { vi: 'Đóng hàng từ Sà lan => Container', en: 'Stuffing from barge to container' },
-  'Rút hàng từ Container => Sà lan (cont)': { vi: 'Rút hàng từ Container => Sà lan (cont)', en: 'Unstuffing from container to barge' }
-};
-
 const VEHICLE_MAP: Record<string, { vi: string, en: string }> = {
   'Xe': { vi: 'Xe', en: 'Truck' },
   'Ghe': { vi: 'Ghe', en: 'Wooden boat' },
@@ -142,22 +134,29 @@ export default function ServiceRegistrationModule() {
     }
   }, []);
 
-  const loadData = () => {
-    const local = localStorage.getItem(STORAGE_KEYS.TARIFF);
+  const loadData = (currentLang: 'vi' | 'en') => {
+    const key = STORAGE_KEYS.TARIFF(currentLang);
+    const local = localStorage.getItem(key);
     if (!local) {
-      const def: RegistrationServiceItem[] = [
+      const def: RegistrationServiceItem[] = currentLang === 'vi' ? [
         { id: '1', name: 'Vận chuyển cont nội bộ Cảng', unit: 'cont' },
         { id: '2', name: 'Đóng hàng cont => xe', unit: 'cont' },
         { id: '3', name: 'Rút hàng xe => cont', unit: 'cont' },
         { id: '4', name: 'Đóng hàng từ Sà lan => Container', unit: 'cont' },
         { id: '5', name: 'Rút hàng từ Container => Sà lan (cont)', unit: 'cont' },
+      ] : [
+        { id: '1', name: 'Internal container transport', unit: 'cont' },
+        { id: '2', name: 'Stuffing from container to truck', unit: 'cont' },
+        { id: '3', name: 'Unstuffing from truck to container', unit: 'cont' },
+        { id: '4', name: 'Stuffing cargo from Barge -> Container', unit: 'cont' },
+        { id: '5', name: 'Unstuffing cargo from Container => Barge (cont)', unit: 'cont' },
       ];
       setServices(def);
-      localStorage.setItem(STORAGE_KEYS.TARIFF, JSON.stringify(def));
+      localStorage.setItem(key, JSON.stringify(def));
     } else {
       setServices(JSON.parse(local));
     }
-    const saved = localStorage.getItem(STORAGE_KEYS.REGISTRATIONS);
+    const saved = localStorage.getItem(STORAGE_KEYS.REGISTRATIONS(currentLang));
     setHistoryItems(saved ? JSON.parse(saved) : []);
   };
 
@@ -198,7 +197,6 @@ export default function ServiceRegistrationModule() {
       if (ctx) { ctx.drawImage(img, 0, 0); setLogoBase64(cvs.toDataURL('image/png')); }
     };
 
-    loadData();
     setRegNo(peekRegNo());
     initFlatpickr();
 
@@ -210,13 +208,17 @@ export default function ServiceRegistrationModule() {
     };
   }, []);
 
+  useEffect(() => {
+    loadData(lang);
+  }, [lang]);
+
   const handleSaveService = (e: React.FormEvent) => {
     e.preventDefault();
     if (!serviceForm.name.trim()) return;
     const s: RegistrationServiceItem = { id: editServiceId || Date.now().toString(), name: serviceForm.name, unit: serviceForm.unit || 'cont' };
     const newList = editServiceId ? services.map(x => x.id === editServiceId ? s : x) : [...services, s];
     setServices(newList);
-    localStorage.setItem(STORAGE_KEYS.TARIFF, JSON.stringify(newList));
+    localStorage.setItem(STORAGE_KEYS.TARIFF(lang), JSON.stringify(newList));
     setServiceForm({ name: '', unit: 'cont' });
     setEditServiceId(null);
   };
@@ -239,7 +241,7 @@ export default function ServiceRegistrationModule() {
         }).filter(x => x.name);
         if (newList.length === 0) return alert('Không tìm thấy dữ liệu hợp lệ trong file.');
         if (confirm(`Tìm thấy ${newList.length} dịch vụ. Thay thế danh sách hiện tại?`)) {
-          setServices(newList); localStorage.setItem(STORAGE_KEYS.TARIFF, JSON.stringify(newList));
+          setServices(newList); localStorage.setItem(STORAGE_KEYS.TARIFF(lang), JSON.stringify(newList));
         }
       } catch { alert('Lỗi đọc file Excel.'); }
     };
@@ -284,10 +286,11 @@ export default function ServiceRegistrationModule() {
       containerType, customerNotes: notes,
       items: items.filter(x => x.serviceName), createdAt: new Date().toISOString(),
     };
-    const existing = JSON.parse(localStorage.getItem(STORAGE_KEYS.REGISTRATIONS) || '[]') as RegistrationHistoryItem[];
+    const key = STORAGE_KEYS.REGISTRATIONS(lang);
+    const existing = JSON.parse(localStorage.getItem(key) || '[]') as RegistrationHistoryItem[];
     const idx = existing.findIndex(r => r.id === reg.id);
     if (idx >= 0) existing[idx] = reg; else existing.push(reg);
-    localStorage.setItem(STORAGE_KEYS.REGISTRATIONS, JSON.stringify(existing));
+    localStorage.setItem(key, JSON.stringify(existing));
     setHistoryItems([...existing]);
     advanceRegNo(); setRegNo(peekRegNo());
     alert('Đã lưu!');
@@ -393,10 +396,7 @@ export default function ServiceRegistrationModule() {
                     <td style={S.cTd}>
                       <select style={{ ...S.cInput, padding: '3px 6px', fontSize: 12 }} value={it.serviceName} onChange={e => { const nm = [...items]; nm[idx].serviceName = e.target.value; setItems(nm); }}>
                         <option value="">{t.sr}</option>
-                        {services.map(s => {
-                          const label = SERVICE_MAP[s.name]?.[lang] || s.name;
-                          return <option key={s.id} value={s.name}>{label} ({s.unit})</option>;
-                        })}
+                        {services.map(s => <option key={s.id} value={s.name}>{s.name} ({s.unit})</option>)}
                       </select>
                     </td>
                     <td style={S.cTd}>
@@ -499,7 +499,7 @@ export default function ServiceRegistrationModule() {
                 return (
                   <tr key={idx}>
                     <td style={{ border: '1px solid #333', padding: 8, textAlign: 'center' }}>{idx + 1}</td>
-                    <td style={{ border: '1px solid #333', padding: 8, fontWeight: 'bold' }}>{SERVICE_MAP[item.serviceName]?.[lang] || item.serviceName}</td>
+                    <td style={{ border: '1px solid #333', padding: 8, fontWeight: 'bold' }}>{item.serviceName}</td>
                     <td style={{ border: '1px solid #333', padding: 8, textAlign: 'center' }}>{item.size}</td>
                     <td style={{ border: '1px solid #333', padding: 8, textAlign: 'center' }}>{s ? s.unit : '-'}</td>
                     <td style={{ border: '1px solid #333', padding: 8, textAlign: 'center', fontWeight: 'bold', color: '#d32f2f' }}>{item.quantity}</td>
@@ -553,7 +553,7 @@ export default function ServiceRegistrationModule() {
                       <td style={{ ...S.cTd, textAlign: 'center' }}>{s.unit}</td>
                       <td style={{ ...S.cTd, textAlign: 'center' }}>
                         <button onClick={() => { setEditServiceId(s.id); setServiceForm({ name: s.name, unit: s.unit }); }} style={S.editBtn}>Sửa</button>
-                        <button onClick={() => { if (confirm('Xóa?')) { const nl = services.filter(x => x.id !== s.id); setServices(nl); localStorage.setItem(STORAGE_KEYS.TARIFF, JSON.stringify(nl)); } }} style={S.deleteBtn}>Xóa</button>
+                        <button onClick={() => { if (confirm('Xóa?')) { const nl = services.filter(x => x.id !== s.id); setServices(nl); localStorage.setItem(STORAGE_KEYS.TARIFF(lang), JSON.stringify(nl)); } }} style={S.deleteBtn}>Xóa</button>
                       </td>
                     </tr>
                   ))}
