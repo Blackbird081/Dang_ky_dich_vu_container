@@ -180,11 +180,11 @@ const hideModal = (modalElement) => { modalElement.style.display = 'none'; };
 // --- 4. UI UPDATE FUNCTIONS ---
 function createTableRow() {
     const row = document.createElement('tr');
-    row.className = 'item-row';
+    row.className = 'item-row border-b border-gray-200';
 
     // Cell 1: Service Select
     const serviceCell = document.createElement('td');
-    serviceCell.className = 'px-4 py-2 align-top';
+    serviceCell.className = 'p-2 align-middle border-r border-gray-200';
     const serviceSelect = document.createElement('select');
     serviceSelect.className = 'product-select mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm';
     const productOptions = state.products.map(p => `<option value="${p.name}">${p.name}</option>`).join('');
@@ -195,7 +195,7 @@ function createTableRow() {
 
     // Cell 2: Size Select
     const sizeCell = document.createElement('td');
-    sizeCell.className = 'px-4 py-2 align-top';
+    sizeCell.className = 'p-2 align-middle border-r border-gray-200';
     const sizeSelect = document.createElement('select');
     sizeSelect.className = 'size-select mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm text-center';
     sizeSelect.innerHTML = `<option>20'</option><option>40'</option><option>45'</option>`;
@@ -204,7 +204,7 @@ function createTableRow() {
 
     // Cell 3: Quantity Input
     const qtyCell = document.createElement('td');
-    qtyCell.className = 'px-4 py-2 align-top';
+    qtyCell.className = 'p-2 align-middle border-r border-gray-200';
     const qtyInput = document.createElement('input');
     qtyInput.type = 'number';
     qtyInput.className = 'qty-input mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm text-center';
@@ -215,7 +215,7 @@ function createTableRow() {
     
     // Cell 4: Manifest Input
     const manifestCell = document.createElement('td');
-    manifestCell.className = 'px-4 py-2 align-top';
+    manifestCell.className = 'p-2 align-middle border-r border-gray-200';
     const manifestInput = document.createElement('input');
     manifestInput.type = 'number';
     manifestInput.className = 'manifest-input mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm text-center';
@@ -227,12 +227,10 @@ function createTableRow() {
 
     // Cell 5: Total Display
     const totalCell = document.createElement('td');
-    totalCell.className = 'px-4 py-2 align-top text-center font-bold text-sm';
-    const totalDisplay = document.createElement('input');
-    totalDisplay.type = 'text';
-    totalDisplay.className = 'total-display mt-1 block w-full rounded-md border-gray-300 bg-gray-100 shadow-sm sm:text-sm text-center font-bold text-gray-700';
-    totalDisplay.value = '0';
-    totalDisplay.disabled = true;
+    totalCell.className = 'p-2 align-middle text-center font-bold text-sm border-r border-gray-200';
+    const totalDisplay = document.createElement('span');
+    totalDisplay.className = 'total-display';
+    totalDisplay.textContent = '0';
     totalCell.appendChild(totalDisplay);
     row.appendChild(totalCell);
 
@@ -240,14 +238,14 @@ function createTableRow() {
     const calculateTotal = () => {
         const qty = parseFloat(qtyInput.value) || 0;
         const manifest = parseFloat(manifestInput.value) || 0;
-        totalDisplay.value = (qty * manifest).toLocaleString();
+        totalDisplay.textContent = (qty * manifest).toLocaleString();
     };
     qtyInput.addEventListener('input', calculateTotal);
     manifestInput.addEventListener('input', calculateTotal);
 
     // Cell 6: Remove Button
     const removeCell = document.createElement('td');
-    removeCell.className = 'px-2 py-2 align-middle text-center';
+    removeCell.className = 'p-2 align-middle text-center';
     const removeBtn = document.createElement('button');
     removeBtn.type = 'button';
     removeBtn.className = 'remove-row-btn text-red-500 hover:text-red-700 font-bold';
