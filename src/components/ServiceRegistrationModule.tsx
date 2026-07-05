@@ -28,6 +28,14 @@ const T: any = {
     ph: 'Phương án', sz: 'Size', sl: 'SL', tl: 'Manifest', ttl: 'Total', sr: '- Chọn phương án -', add: '+ Thêm dòng',
     new: 'Tạo mới', sav: 'Lưu', upd: 'Cập nhật', pdf: 'In / Xuất PDF', pw: 'Bản xem trước (A4)',
     warn: 'Trống', pdt: 'ĐĂNG KÝ DỊCH VỤ',
+    notesHeader: 'Lưu ý:',
+    note1: 'Chúng tôi ghi nhận theo thông tin khách hàng cung cấp, vui lòng kiểm tra lại phương án.',
+    note2: 'Khi thay đổi kế hoạch làm hàng: vui lòng liên hệ, báo lại thời gian mới để chúng tôi chuẩn bị phương tiện, thiết bị...',
+    note3: 'Đối với phương án đóng/rút/sang container, chúng tôi không chịu trách nhiệm việc tháo gỡ, chằng buộc hàng hoá, cũng như các hư hỏng bên trong container như xước, gãy ván sàn...',
+    note4: 'Nếu hàng hoá thực tế khác thông tin ban đầu hoặc ngoài khả năng đáp ứng của thiết bị tại Cảng. Phương án làm hàng sẽ được điều chỉnh theo hiện trường.',
+    unitTons: 'tấn',
+    unitItem: 'ĐVT',
+    stt: 'STT',
   },
   en: {
     title: 'Service Registration', sub: 'Developed by: Tien/Tan Thuan Port', history: 'History', lang: 'EN / VI',
@@ -38,6 +46,14 @@ const T: any = {
     ph: 'Service', sz: 'Size', sl: 'Qty', tl: 'Manifest Wt', ttl: 'Total Wt', sr: '- Select -', add: '+ Add Row',
     new: 'New', sav: 'Save', upd: 'Update', pdf: 'Print/PDF', pw: 'A4 Preview',
     warn: 'Empty', pdt: 'SERVICE REGISTRATION',
+    notesHeader: 'Notes:',
+    note1: 'We record the information based on the details provided by the customer; please review the handling plan carefully.',
+    note2: 'If there are any changes to the work schedule, please contact us to provide the new time so we can prepare the necessary vehicles and equipment.',
+    note3: 'For stuffing/unstuffing services, we are not responsible for lashing/unlashing or securing/unsecuring cargo, nor for any internal container damages such as scratches, broken floorboards, etc.',
+    note4: 'If the actual cargo differs from the initial information or exceeds the handling capacity of the Port’s equipment, the cargo handling plan will be adjusted according to on-site conditions.',
+    unitTons: 'tons',
+    unitItem: 'Unit',
+    stt: 'No.',
   },
 };
 
@@ -413,34 +429,34 @@ export default function ServiceRegistrationModule() {
               </div>
             </div>
             <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-              <p style={{ margin: 0, fontSize: 14 }}>Số: <span style={{ color: '#000' }}>{regNo}</span></p>
-              <p style={{ margin: '6px 0 0', fontSize: 14 }}><strong>Ngày:</strong> {regDate || '...'}</p>
+              <p style={{ margin: 0, fontSize: 14 }}>{lang === 'vi' ? 'Số:' : 'No.:'} <span style={{ color: '#000' }}>{regNo}</span></p>
+              <p style={{ margin: '6px 0 0', fontSize: 14 }}><strong>{lang === 'vi' ? 'Ngày' : 'Date'}:</strong> {regDate || '...'}</p>
             </div>
           </div>
           <h1 style={{ textAlign: 'center', fontSize: 22, fontWeight: 'bold', textTransform: 'uppercase', marginBottom: 20 }}>{t.pdt}</h1>
           <table style={{ width: '100%', fontSize: 13, marginBottom: 20 }}>
             <tbody>
-              <tr><td style={{ width: '160px', whiteSpace: 'nowrap', fontWeight: 'bold', padding: '4px 0' }}>Tên khách hàng:</td><td style={{ padding: '4px 0' }}>{customerName || '...'}</td></tr>
-              <tr><td style={{ whiteSpace: 'nowrap', fontWeight: 'bold', padding: '4px 0' }}>Địa chỉ:</td><td style={{ padding: '4px 0' }}>{customerAddress || '...'}</td></tr>
-              <tr><td style={{ whiteSpace: 'nowrap', fontWeight: 'bold', padding: '4px 0' }}>Điện thoại:</td><td style={{ padding: '4px 0' }}>{customerPhone || '...'}</td></tr>
-              <tr><td style={{ whiteSpace: 'nowrap', fontWeight: 'bold', padding: '4px 0' }}>Thời gian cập cảng:</td><td style={{ padding: '4px 0', fontWeight: 'bold', color: '#d32f2f' }}>{workingDate || '...'}</td></tr>
-              <tr><td style={{ whiteSpace: 'nowrap', fontWeight: 'bold', padding: '4px 0' }}>Thời gian rời cảng:</td><td style={{ padding: '4px 0', fontWeight: 'bold', color: '#d32f2f' }}>{leaveDate || '...'}</td></tr>
-              <tr><td style={{ whiteSpace: 'nowrap', fontWeight: 'bold', padding: '4px 0' }}>Hàng hóa:</td><td style={{ padding: '4px 0' }}>{cargoType === 'Phương án khác' ? cargoTypeOther : cargoType}</td></tr>
-              <tr><td style={{ whiteSpace: 'nowrap', fontWeight: 'bold', padding: '4px 0' }}>Phương tiện:</td><td style={{ padding: '4px 0' }}>{containerType || '----'}</td></tr>
-              {notes && <tr><td style={{ whiteSpace: 'nowrap', fontWeight: 'bold', padding: '4px 0' }}>Ghi chú:</td><td style={{ padding: '4px 0' }}>{notes}</td></tr>}
+              <tr><td style={{ width: '160px', whiteSpace: 'nowrap', fontWeight: 'bold', padding: '4px 0' }}>{t.cus}:</td><td style={{ padding: '4px 0' }}>{customerName || '...'}</td></tr>
+              <tr><td style={{ whiteSpace: 'nowrap', fontWeight: 'bold', padding: '4px 0' }}>{t.addr}:</td><td style={{ padding: '4px 0' }}>{customerAddress || '...'}</td></tr>
+              <tr><td style={{ whiteSpace: 'nowrap', fontWeight: 'bold', padding: '4px 0' }}>{t.phone}:</td><td style={{ padding: '4px 0' }}>{customerPhone || '...'}</td></tr>
+              <tr><td style={{ whiteSpace: 'nowrap', fontWeight: 'bold', padding: '4px 0' }}>{t.wdate}:</td><td style={{ padding: '4px 0', fontWeight: 'bold', color: '#d32f2f' }}>{workingDate || '...'}</td></tr>
+              <tr><td style={{ whiteSpace: 'nowrap', fontWeight: 'bold', padding: '4px 0' }}>{t.ldate}:</td><td style={{ padding: '4px 0', fontWeight: 'bold', color: '#d32f2f' }}>{leaveDate || '...'}</td></tr>
+              <tr><td style={{ whiteSpace: 'nowrap', fontWeight: 'bold', padding: '4px 0' }}>{t.cg}:</td><td style={{ padding: '4px 0' }}>{cargoType === 'Phương án khác' ? cargoTypeOther : cargoType}</td></tr>
+              <tr><td style={{ whiteSpace: 'nowrap', fontWeight: 'bold', padding: '4px 0' }}>{t.cty}:</td><td style={{ padding: '4px 0' }}>{containerType || '----'}</td></tr>
+              {notes && <tr><td style={{ whiteSpace: 'nowrap', fontWeight: 'bold', padding: '4px 0' }}>{t.nts}:</td><td style={{ padding: '4px 0' }}>{notes}</td></tr>}
             </tbody>
           </table>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, marginBottom: 20 }}>
             <thead style={{ background: '#f2f2f2' }}>
               <tr>
-                <th style={{ border: '1px solid #333', padding: 8, width: '5%', textAlign: 'center' }}>STT</th>
-                <th style={{ border: '1px solid #333', padding: 8, textAlign: 'center', width: '35%' }}>Phương án</th>
-                <th style={{ border: '1px solid #333', padding: 8, textAlign: 'center' }}>Size</th>
-                <th style={{ border: '1px solid #333', padding: 8, textAlign: 'center' }}>ĐVT</th>
-                <th style={{ border: '1px solid #333', padding: 8, textAlign: 'center' }}>SL</th>
-                <th style={{ border: '1px solid #333', padding: 8, textAlign: 'center' }}>ĐVT</th>
-                <th style={{ border: '1px solid #333', padding: 8, textAlign: 'center' }}>Manifest</th>
-                <th style={{ border: '1px solid #333', padding: 8, textAlign: 'center' }}>Total (tấn)</th>
+                <th style={{ border: '1px solid #333', padding: 8, width: '5%', textAlign: 'center' }}>{t.stt}</th>
+                <th style={{ border: '1px solid #333', padding: 8, textAlign: 'center', width: '35%' }}>{t.ph}</th>
+                <th style={{ border: '1px solid #333', padding: 8, textAlign: 'center' }}>{t.sz}</th>
+                <th style={{ border: '1px solid #333', padding: 8, textAlign: 'center' }}>{t.unitItem}</th>
+                <th style={{ border: '1px solid #333', padding: 8, textAlign: 'center' }}>{t.sl}</th>
+                <th style={{ border: '1px solid #333', padding: 8, textAlign: 'center' }}>{t.unitItem}</th>
+                <th style={{ border: '1px solid #333', padding: 8, textAlign: 'center' }}>{t.tl}</th>
+                <th style={{ border: '1px solid #333', padding: 8, textAlign: 'center' }}>{t.ttl} ({t.unitTons})</th>
               </tr>
             </thead>
             <tbody>
@@ -453,7 +469,7 @@ export default function ServiceRegistrationModule() {
                     <td style={{ border: '1px solid #333', padding: 8, textAlign: 'center' }}>{item.size}</td>
                     <td style={{ border: '1px solid #333', padding: 8, textAlign: 'center' }}>{s ? s.unit : '-'}</td>
                     <td style={{ border: '1px solid #333', padding: 8, textAlign: 'center', fontWeight: 'bold', color: '#d32f2f' }}>{item.quantity}</td>
-                    <td style={{ border: '1px solid #333', padding: 8, textAlign: 'center' }}>tấn</td>
+                    <td style={{ border: '1px solid #333', padding: 8, textAlign: 'center' }}>{t.unitTons}</td>
                     <td style={{ border: '1px solid #333', padding: 8, textAlign: 'center' }}>{item.tlManifest || ''}</td>
                     <td style={{ border: '1px solid #333', padding: 8, textAlign: 'center', fontWeight: 'bold' }}>{(item.quantity * (item.tlManifest || 0)).toLocaleString()}</td>
                   </tr>
@@ -462,12 +478,12 @@ export default function ServiceRegistrationModule() {
             </tbody>
           </table>
           <div style={{ background: '#f9f9f9', border: '1px solid #ccc', padding: 12, fontSize: 12 }}>
-            <p style={{ margin: '0 0 6px 0', fontWeight: 'bold', textDecoration: 'underline' }}>Lưu ý:</p>
+            <p style={{ margin: '0 0 6px 0', fontWeight: 'bold', textDecoration: 'underline' }}>{t.notesHeader}</p>
             <ul style={{ margin: 0, paddingLeft: 0, listStyle: 'none', lineHeight: 1.6 }}>
-              <li style={{ marginBottom: 4, display: 'flex', gap: 6 }}><span style={{ color: '#28a745' }}>✔</span><span>Chúng tôi ghi nhận theo thông tin khách hàng cung cấp, vui lòng kiểm tra lại phương án.</span></li>
-              <li style={{ marginBottom: 4, display: 'flex', gap: 6 }}><span style={{ color: '#28a745' }}>✔</span><span>Khi thay đổi kế hoạch làm hàng: vui lòng liên hệ, báo lại thời gian mới để chúng tôi chuẩn bị phương tiện, thiết bị...</span></li>
-              <li style={{ marginBottom: 4, display: 'flex', gap: 6 }}><span style={{ color: '#28a745' }}>✔</span><span>Đối với phương án đóng/rút/sang container, chúng tôi không chịu trách nhiệm việc tháo gỡ, chằng buộc hàng hoá, cũng như các hư hỏng bên trong container như xước, gãy ván sàn...</span></li>
-              <li style={{ display: 'flex', gap: 6 }}><span style={{ color: '#28a745' }}>✔</span><span>Nếu hàng hoá thực tế khác thông tin ban đầu hoặc ngoài khả năng đáp ứng của thiết bị tại Cảng. Phương án làm hàng sẽ được điều chỉnh theo hiện trường.</span></li>
+              <li style={{ marginBottom: 4, display: 'flex', gap: 6 }}><span style={{ color: '#28a745' }}>✔</span><span>{t.note1}</span></li>
+              <li style={{ marginBottom: 4, display: 'flex', gap: 6 }}><span style={{ color: '#28a745' }}>✔</span><span>{t.note2}</span></li>
+              <li style={{ marginBottom: 4, display: 'flex', gap: 6 }}><span style={{ color: '#28a745' }}>✔</span><span>{t.note3}</span></li>
+              <li style={{ display: 'flex', gap: 6 }}><span style={{ color: '#28a745' }}>✔</span><span>{t.note4}</span></li>
             </ul>
           </div>
         </div>
