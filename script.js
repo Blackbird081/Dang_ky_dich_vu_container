@@ -79,8 +79,8 @@ const i18n = {
         thQty: { vi: 'SL', en: 'QTY' },
         quoteNotesTitle: { vi: 'Lưu ý:', en: 'Notes:' },
         quoteNotesContent: { 
-        vi: `<li style="margin-bottom: 4px; list-style-type: none;"><span style="color: #28a745; margin-right: 5px;">✔</span>Chúng tôi ghi nhận theo thông tin khách hàng cung cấp, vui lòng kiểm tra lại phương án.</li><li style="margin-bottom: 4px; list-style-type: none;"><span style="color: #28a745; margin-right: 5px;">✔</span>Khi thay đổi kế hoạch làm hàng: vui lòng liên hệ, báo lại thời gian mới để chúng tôi chuẩn bị phương tiện, thiết bị...</li><li style="margin-bottom: 4px; list-style-type: none;"><span style="color: #28a745; margin-right: 5px;">✔</span>Đối với phương án đóng/rút/sang container, chúng tôi không chịu trách nhiệm việc tháo gỡ, chằng buộc hàng hoá, cũng như các hư hỏng bên trong container như xước, gãy ván sàn...</li><li style="list-style-type: none;"><span style="color: #28a745; margin-right: 5px;">✔</span>Nếu hàng hoá thực tế khác thông tin ban đầu hoặc ngoài khả năng đáp ứng của thiết bị tại Cảng. Phương án làm hàng sẽ được điều chỉnh theo hiện trường.</li>`,
-        en: `<li style="margin-bottom: 4px; list-style-type: none;"><span style="color: #28a745; margin-right: 5px;">✔</span>We record the information based on the details provided by the customer; please review the handling plan carefully.</li><li style="margin-bottom: 4px; list-style-type: none;"><span style="color: #28a745; margin-right: 5px;">✔</span>If there are any changes to the work schedule, please contact us to provide the new time so we can prepare the necessary vehicles and equipment.</li><li style="margin-bottom: 4px; list-style-type: none;"><span style="color: #28a745; margin-right: 5px;">✔</span>For stuffing/unstuffing services, we are not responsible for lashing/unlashing or securing/unsecuring cargo, nor for any internal container damages such as scratches, broken floorboards, etc.</li><li style="list-style-type: none;"><span style="color: #28a745; margin-right: 5px;">✔</span>If the actual cargo differs from the initial information or exceeds the handling capacity of the Port’s equipment, the cargo handling plan will be adjusted according to on-site conditions.</li>`
+        vi: `<li style="margin-bottom: 4px;">Chúng tôi ghi nhận theo thông tin khách hàng cung cấp, vui lòng kiểm tra lại phương án.</li><li style="margin-bottom: 4px;">Khi thay đổi kế hoạch làm hàng: vui lòng liên hệ, báo lại thời gian mới để chúng tôi chuẩn bị phương tiện, thiết bị...</li><li style="margin-bottom: 4px;">Đối với phương án đóng/rút/sang container, chúng tôi không chịu trách nhiệm việc tháo gỡ, chằng buộc hàng hoá, cũng như các hư hỏng bên trong container như xước, gãy ván sàn...</li><li>Nếu hàng hoá thực tế khác thông tin ban đầu hoặc ngoài khả năng đáp ứng của thiết bị tại Cảng. Phương án làm hàng sẽ được điều chỉnh theo hiện trường.</li>`,
+        en: `<li style="margin-bottom: 4px;">We record the information based on the details provided by the customer; please review the handling plan carefully.</li><li style="margin-bottom: 4px;">If there are any changes to the work schedule, please contact us to provide the new time so we can prepare the necessary vehicles and equipment.</li><li style="margin-bottom: 4px;">For stuffing/unstuffing services, we are not responsible for lashing/unlashing or securing/unsecuring cargo, nor for any internal container damages such as scratches, broken floorboards, etc.</li><li>If the actual cargo differs from the initial information or exceeds the handling capacity of the Port’s equipment, the cargo handling plan will be adjusted according to on-site conditions.</li>`
     }
     }
 };
@@ -186,7 +186,7 @@ function createTableRow() {
     const serviceCell = document.createElement('td');
     serviceCell.className = 'p-2 align-middle border-r border-gray-200';
     const serviceSelect = document.createElement('select');
-    serviceSelect.className = 'product-select mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm';
+    serviceSelect.className = 'product-select w-full rounded border-gray-300 text-[13px] py-1 px-2 focus:ring-blue-500 focus:border-blue-500';
     const productOptions = state.products.map(p => `<option value="${p.name}">${p.name}</option>`).join('');
     const selectOptionText = i18n.selectOption[state.currentLang];
     serviceSelect.innerHTML = `<option value="">${selectOptionText}</option>${productOptions}`;
@@ -197,7 +197,7 @@ function createTableRow() {
     const sizeCell = document.createElement('td');
     sizeCell.className = 'p-2 align-middle border-r border-gray-200';
     const sizeSelect = document.createElement('select');
-    sizeSelect.className = 'size-select mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm text-center';
+    sizeSelect.className = 'size-select w-full rounded border-gray-300 text-[13px] py-1 px-1 text-center focus:ring-blue-500 focus:border-blue-500';
     sizeSelect.innerHTML = `<option>20'</option><option>40'</option><option>45'</option>`;
     sizeCell.appendChild(sizeSelect);
     row.appendChild(sizeCell);
@@ -207,7 +207,7 @@ function createTableRow() {
     qtyCell.className = 'p-2 align-middle border-r border-gray-200';
     const qtyInput = document.createElement('input');
     qtyInput.type = 'number';
-    qtyInput.className = 'qty-input mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm text-center';
+    qtyInput.className = 'qty-input w-full rounded border-gray-300 text-[13px] py-1 px-1 text-center focus:ring-blue-500 focus:border-blue-500';
     qtyInput.value = '1';
     qtyInput.min = '1';
     qtyCell.appendChild(qtyInput);
@@ -218,7 +218,7 @@ function createTableRow() {
     manifestCell.className = 'p-2 align-middle border-r border-gray-200';
     const manifestInput = document.createElement('input');
     manifestInput.type = 'number';
-    manifestInput.className = 'manifest-input mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm text-center';
+    manifestInput.className = 'manifest-input w-full rounded border-gray-300 text-[13px] py-1 px-1 text-center focus:ring-blue-500 focus:border-blue-500';
     manifestInput.value = '';
     manifestInput.min = '0';
     manifestInput.step = '1';
