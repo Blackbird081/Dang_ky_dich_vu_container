@@ -5,7 +5,7 @@ import * as XLSX from 'xlsx';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import * as S from '../styles/S';
-import type { RegistrationServiceItem, RegistrationLineItem, RegistrationHistoryItem } from '../types';
+import type { RegistrationServiceItem, RegistrationHistoryItem } from '../types';
 
 const STORAGE_KEYS = {
   TARIFF: (lang: string) => `tanthuan_dkdv_tariff_${lang}`,
@@ -98,7 +98,7 @@ export default function ServiceRegistrationModule() {
   const [cargoTypeOther, setCargoTypeOther] = useState('');
   const [containerType, setContainerType] = useState('');
   const [notes, setNotes] = useState('');
-  const [items, setItems] = useState<RegistrationLineItem[]>([{ id: `RI-${Date.now()}`, serviceName: '', size: "20'", quantity: 1, tlManifest: 0 }]);
+  const [items, setItems] = useState<any[]>([{ id: `RI-${Date.now()}`, serviceName: '', size: "20'", quantity: 1, tlManifest: '' }]);
 
   const [isServiceModalOpen, setIsServiceModalOpen] = useState(false);
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
@@ -273,7 +273,7 @@ export default function ServiceRegistrationModule() {
     if (fpLeaveDate.current) fpLeaveDate.current.setDate(now, false);
     setCustomerName(''); setCustomerAddress(''); setCustomerPhone('');
     setCargoType('Phân bón'); setCargoTypeOther(''); setContainerType(''); setNotes('');
-    setItems([{ id: `RI-${Date.now()}`, serviceName: '', size: "20'", quantity: 1, tlManifest: 0 }]);
+    setItems([{ id: `RI-${Date.now()}`, serviceName: '', size: "20'", quantity: 1, tlManifest: '' }]);
     setPreviewImg(null);
   };
 
@@ -284,7 +284,11 @@ export default function ServiceRegistrationModule() {
       customerName, customerAddress, customerPhone,
       workingDate, leaveDate, cargoType: cargoType === 'Phương án khác' ? cargoTypeOther : cargoType,
       containerType, customerNotes: notes,
-      items: items.filter(x => x.serviceName), createdAt: new Date().toISOString(),
+      items: items.filter(x => x.serviceName).map(x => ({
+        ...x,
+        quantity: parseInt(x.quantity) || 0,
+        tlManifest: parseFloat(x.tlManifest) || 0,
+      })), createdAt: new Date().toISOString(),
     };
     const key = STORAGE_KEYS.REGISTRATIONS(lang);
     const existing = JSON.parse(localStorage.getItem(key) || '[]') as RegistrationHistoryItem[];
@@ -405,13 +409,13 @@ export default function ServiceRegistrationModule() {
                       </select>
                     </td>
                     <td style={S.cTd}>
-                      <input style={{ ...S.cInput, padding: '3px 4px', fontSize: 12, textAlign: 'center' }} type="number" min="1" value={it.quantity} onChange={e => { const nm = [...items]; nm[idx].quantity = parseInt(e.target.value) || 1; setItems(nm); }} />
+                      <input style={{ ...S.cInput, padding: '3px 4px', fontSize: 12, textAlign: 'center' }} type="number" min="1" value={it.quantity} onChange={e => { const val = e.target.value; const nm = [...items]; nm[idx].quantity = val === '' ? '' : parseInt(val) || 0; setItems(nm); }} />
                     </td>
                     <td style={S.cTd}>
-                      <input style={{ ...S.cInput, padding: '3px 4px', fontSize: 12, textAlign: 'center' }} type="number" min="0" step="1" value={it.tlManifest || ''} onChange={e => { const nm = [...items]; nm[idx].tlManifest = parseFloat(e.target.value) || 0; setItems(nm); }} />
+                      <input style={{ ...S.cInput, padding: '3px 4px', fontSize: 12, textAlign: 'center' }} type="number" min="0" step="1" value={it.tlManifest} onChange={e => { const val = e.target.value; const nm = [...items]; nm[idx].tlManifest = val === '' ? '' : parseFloat(val) || 0; setItems(nm); }} />
                     </td>
                     <td style={{ ...S.cTd, textAlign: 'center', fontWeight: 'bold', fontSize: 12 }}>
-                      {(it.quantity * (it.tlManifest || 0)).toLocaleString()}
+                      {((parseFloat(it.quantity) || 0) * (parseFloat(it.tlManifest) || 0)).toLocaleString()}
                     </td>
                     <td style={{ ...S.cTd, textAlign: 'center' }}>
                       <button onClick={() => setItems(items.filter((_, i) => i !== idx))} style={S.removeRowBtn}>×</button>
@@ -421,7 +425,7 @@ export default function ServiceRegistrationModule() {
               </tbody>
             </table>
           </div>
-          <button onClick={() => setItems([...items, { id: `RI-${Date.now()}`, serviceName: '', size: "20'", quantity: 1, tlManifest: 0 }])} style={S.addRowBtn}>{t.add}</button>
+          <button onClick={() => setItems([...items, { id: `RI-${Date.now()}`, serviceName: '', size: "20'", quantity: 1, tlManifest: '' }])} style={S.addRowBtn}>{t.add}</button>
         </div>
 
         {/* RIGHT PANEL */}
@@ -502,10 +506,10 @@ export default function ServiceRegistrationModule() {
                     <td style={{ border: '1px solid #333', padding: 8, fontWeight: 'bold' }}>{item.serviceName}</td>
                     <td style={{ border: '1px solid #333', padding: 8, textAlign: 'center' }}>{item.size}</td>
                     <td style={{ border: '1px solid #333', padding: 8, textAlign: 'center' }}>{s ? s.unit : '-'}</td>
-                    <td style={{ border: '1px solid #333', padding: 8, textAlign: 'center', fontWeight: 'bold', color: '#d32f2f' }}>{item.quantity}</td>
-                    <td style={{ border: '1px solid #333', padding: 8, textAlign: 'center' }}>{t.unitTons}</td>
-                    <td style={{ border: '1px solid #333', padding: 8, textAlign: 'center' }}>{item.tlManifest || ''}</td>
-                    <td style={{ border: '1px solid #333', padding: 8, textAlign: 'center', fontWeight: 'bold' }}>{(item.quantity * (item.tlManifest || 0)).toLocaleString()}</td>
+                        <td style={{ border: '1px solid #333', padding: 8, textAlign: 'center', fontWeight: 'bold', color: '#d32f2f' }}>{item.quantity}</td>
+                        <td style={{ border: '1px solid #333', padding: 8, textAlign: 'center' }}>{t.unitTons}</td>
+                        <td style={{ border: '1px solid #333', padding: 8, textAlign: 'center' }}>{item.tlManifest}</td>
+                        <td style={{ border: '1px solid #333', padding: 8, textAlign: 'center', fontWeight: 'bold' }}>{((parseFloat(item.quantity) || 0) * (parseFloat(item.tlManifest) || 0)).toLocaleString()}</td>
                   </tr>
                 );
               })}
