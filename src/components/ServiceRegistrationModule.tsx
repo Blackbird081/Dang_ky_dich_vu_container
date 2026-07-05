@@ -79,6 +79,12 @@ const SERVICE_MAP: Record<string, { vi: string, en: string }> = {
   'Rút hàng từ Container => Sà lan (cont)': { vi: 'Rút hàng từ Container => Sà lan (cont)', en: 'Unstuffing from container to barge' }
 };
 
+const VEHICLE_MAP: Record<string, { vi: string, en: string }> = {
+  'Xe': { vi: 'Xe', en: 'Truck' },
+  'Ghe': { vi: 'Ghe', en: 'Wooden boat' },
+  'Salan': { vi: 'Sà lan', en: 'Barge' }
+};
+
 export default function ServiceRegistrationModule() {
   const [lang, setLang] = useState<'vi' | 'en'>('vi');
   const t = T[lang];
@@ -346,9 +352,9 @@ export default function ServiceRegistrationModule() {
               <div style={S.cLabel}>{t.cty}</div>
               <select style={S.cInput} value={containerType} onChange={e => setContainerType(e.target.value)}>
                 <option value="">----</option>
-                <option value="Xe">Xe</option>
-                <option value="Ghe">Ghe</option>
-                <option value="Salan">Salan</option>
+                {Object.keys(VEHICLE_MAP).map(k => (
+                  <option key={k} value={k}>{VEHICLE_MAP[k][lang]}</option>
+                ))}
               </select>
             </div>
             <div>
@@ -468,7 +474,7 @@ export default function ServiceRegistrationModule() {
               <tr><td style={{ whiteSpace: 'nowrap', fontWeight: 'bold', padding: '4px 0' }}>{t.wdate}:</td><td style={{ padding: '4px 0', fontWeight: 'bold', color: '#d32f2f' }}>{workingDate || '...'}</td></tr>
               <tr><td style={{ whiteSpace: 'nowrap', fontWeight: 'bold', padding: '4px 0' }}>{t.ldate}:</td><td style={{ padding: '4px 0', fontWeight: 'bold', color: '#d32f2f' }}>{leaveDate || '...'}</td></tr>
               <tr><td style={{ whiteSpace: 'nowrap', fontWeight: 'bold', padding: '4px 0' }}>{t.cg}:</td><td style={{ padding: '4px 0' }}>{cargoType === 'Phương án khác' ? cargoTypeOther : (CARGO_MAP[cargoType]?.[lang] || cargoType)}</td></tr>
-              <tr><td style={{ whiteSpace: 'nowrap', fontWeight: 'bold', padding: '4px 0' }}>{t.cty}:</td><td style={{ padding: '4px 0' }}>{containerType || '----'}</td></tr>
+              <tr><td style={{ whiteSpace: 'nowrap', fontWeight: 'bold', padding: '4px 0' }}>{t.cty}:</td><td style={{ padding: '4px 0' }}>{VEHICLE_MAP[containerType]?.[lang] || '----'}</td></tr>
               {notes && <tr><td style={{ whiteSpace: 'nowrap', fontWeight: 'bold', padding: '4px 0' }}>{t.nts}:</td><td style={{ padding: '4px 0' }}>{notes}</td></tr>}
             </tbody>
           </table>
