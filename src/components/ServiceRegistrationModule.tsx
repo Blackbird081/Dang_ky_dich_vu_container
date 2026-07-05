@@ -57,7 +57,7 @@ const T: any = {
   },
 };
 
-const PRE_CARGO = ['Phân bón', 'Vải cuộn', 'Nông sản', 'Pallet Hạt nhựa', 'Gạch', 'Tôn cuộn', 'Cao su', 'Sứ vệ sinh', 'Phương án khác'];
+const PRE_CARGO = ['Phân bón', 'Vải cuộn', 'Nông sản', 'Pallet Hạt nhựa', 'Gạch', 'Tôn cuộn', 'Cao su', 'Sứ vệ sinh', 'Container rỗng', 'Container hàng', 'Phương án khác'];
 
 const CARGO_MAP: Record<string, { vi: string, en: string }> = {
   'Phân bón': { vi: 'Phân bón', en: 'Fertilizer' },
@@ -68,6 +68,8 @@ const CARGO_MAP: Record<string, { vi: string, en: string }> = {
   'Tôn cuộn': { vi: 'Tôn cuộn', en: 'Steel Coils' },
   'Cao su': { vi: 'Cao su', en: 'Rubber' },
   'Sứ vệ sinh': { vi: 'Sứ vệ sinh', en: 'Ceramic Sanitary Ware' },
+  'Container rỗng': { vi: 'Container rỗng', en: 'Empty container' },
+  'Container hàng': { vi: 'Container hàng', en: 'Laden container' },
   'Phương án khác': { vi: 'Phương án khác', en: 'Other Cargo' }
 };
 
