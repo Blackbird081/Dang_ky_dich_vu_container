@@ -227,10 +227,12 @@ function createTableRow() {
 
     // Cell 5: Total Display
     const totalCell = document.createElement('td');
-    totalCell.className = 'px-4 py-2 align-middle text-center font-bold text-sm';
-    const totalDisplay = document.createElement('span');
-    totalDisplay.className = 'total-display';
-    totalDisplay.textContent = '0';
+    totalCell.className = 'px-4 py-2 align-top text-center font-bold text-sm';
+    const totalDisplay = document.createElement('input');
+    totalDisplay.type = 'text';
+    totalDisplay.className = 'total-display mt-1 block w-full rounded-md border-gray-300 bg-gray-100 shadow-sm sm:text-sm text-center font-bold text-gray-700';
+    totalDisplay.value = '0';
+    totalDisplay.disabled = true;
     totalCell.appendChild(totalDisplay);
     row.appendChild(totalCell);
 
@@ -238,7 +240,7 @@ function createTableRow() {
     const calculateTotal = () => {
         const qty = parseFloat(qtyInput.value) || 0;
         const manifest = parseFloat(manifestInput.value) || 0;
-        totalDisplay.textContent = (qty * manifest).toLocaleString();
+        totalDisplay.value = (qty * manifest).toLocaleString();
     };
     qtyInput.addEventListener('input', calculateTotal);
     manifestInput.addEventListener('input', calculateTotal);
