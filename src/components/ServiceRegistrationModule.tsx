@@ -59,6 +59,26 @@ const T: any = {
 
 const PRE_CARGO = ['Phân bón', 'Vải cuộn', 'Nông sản', 'Pallet Hạt nhựa', 'Gạch', 'Tôn cuộn', 'Cao su', 'Sứ vệ sinh', 'Phương án khác'];
 
+const CARGO_MAP: Record<string, { vi: string, en: string }> = {
+  'Phân bón': { vi: 'Phân bón', en: 'Fertilizer' },
+  'Vải cuộn': { vi: 'Vải cuộn', en: 'Fabric Rolls' },
+  'Nông sản': { vi: 'Nông sản', en: 'Agricultural Products' },
+  'Pallet Hạt nhựa': { vi: 'Pallet Hạt nhựa', en: 'Plastic Resin Pallets' },
+  'Gạch': { vi: 'Gạch', en: 'Bricks' },
+  'Tôn cuộn': { vi: 'Tôn cuộn', en: 'Steel Coils' },
+  'Cao su': { vi: 'Cao su', en: 'Rubber' },
+  'Sứ vệ sinh': { vi: 'Sứ vệ sinh', en: 'Ceramic Sanitary Ware' },
+  'Phương án khác': { vi: 'Phương án khác', en: 'Other Cargo' }
+};
+
+const SERVICE_MAP: Record<string, { vi: string, en: string }> = {
+  'Vận chuyển cont nội bộ Cảng': { vi: 'Vận chuyển cont nội bộ Cảng', en: 'Internal container transport' },
+  'Đóng hàng cont => xe': { vi: 'Đóng hàng cont => xe', en: 'Stuffing from container to truck' },
+  'Rút hàng xe => cont': { vi: 'Rút hàng xe => cont', en: 'Unstuffing from truck to container' },
+  'Đóng hàng từ Sà lan => Container': { vi: 'Đóng hàng từ Sà lan => Container', en: 'Stuffing from barge to container' },
+  'Rút hàng từ Container => Sà lan (cont)': { vi: 'Rút hàng từ Container => Sà lan (cont)', en: 'Unstuffing from container to barge' }
+};
+
 export default function ServiceRegistrationModule() {
   const [lang, setLang] = useState<'vi' | 'en'>('vi');
   const t = T[lang];
@@ -334,7 +354,10 @@ export default function ServiceRegistrationModule() {
             <div>
               <div style={S.cLabel}>{t.cg}</div>
               <select style={S.cInput} value={cargoType} onChange={e => setCargoType(e.target.value)}>
-                {PRE_CARGO.map(c => <option key={c} value={c}>{c}</option>)}
+                {PRE_CARGO.map(c => {
+                  const label = CARGO_MAP[c]?.[lang] || c;
+                  return <option key={c} value={c}>{label}</option>;
+                })}
               </select>
             </div>
           </div>
@@ -362,7 +385,10 @@ export default function ServiceRegistrationModule() {
                     <td style={S.cTd}>
                       <select style={{ ...S.cInput, padding: '3px 6px', fontSize: 12 }} value={it.serviceName} onChange={e => { const nm = [...items]; nm[idx].serviceName = e.target.value; setItems(nm); }}>
                         <option value="">{t.sr}</option>
-                        {services.map(s => <option key={s.id} value={s.name}>{s.name} ({s.unit})</option>)}
+                        {services.map(s => {
+                          const label = SERVICE_MAP[s.name]?.[lang] || s.name;
+                          return <option key={s.id} value={s.name}>{label} ({s.unit})</option>;
+                        })}
                       </select>
                     </td>
                     <td style={S.cTd}>
@@ -441,7 +467,7 @@ export default function ServiceRegistrationModule() {
               <tr><td style={{ whiteSpace: 'nowrap', fontWeight: 'bold', padding: '4px 0' }}>{t.phone}:</td><td style={{ padding: '4px 0' }}>{customerPhone || '...'}</td></tr>
               <tr><td style={{ whiteSpace: 'nowrap', fontWeight: 'bold', padding: '4px 0' }}>{t.wdate}:</td><td style={{ padding: '4px 0', fontWeight: 'bold', color: '#d32f2f' }}>{workingDate || '...'}</td></tr>
               <tr><td style={{ whiteSpace: 'nowrap', fontWeight: 'bold', padding: '4px 0' }}>{t.ldate}:</td><td style={{ padding: '4px 0', fontWeight: 'bold', color: '#d32f2f' }}>{leaveDate || '...'}</td></tr>
-              <tr><td style={{ whiteSpace: 'nowrap', fontWeight: 'bold', padding: '4px 0' }}>{t.cg}:</td><td style={{ padding: '4px 0' }}>{cargoType === 'Phương án khác' ? cargoTypeOther : cargoType}</td></tr>
+              <tr><td style={{ whiteSpace: 'nowrap', fontWeight: 'bold', padding: '4px 0' }}>{t.cg}:</td><td style={{ padding: '4px 0' }}>{cargoType === 'Phương án khác' ? cargoTypeOther : (CARGO_MAP[cargoType]?.[lang] || cargoType)}</td></tr>
               <tr><td style={{ whiteSpace: 'nowrap', fontWeight: 'bold', padding: '4px 0' }}>{t.cty}:</td><td style={{ padding: '4px 0' }}>{containerType || '----'}</td></tr>
               {notes && <tr><td style={{ whiteSpace: 'nowrap', fontWeight: 'bold', padding: '4px 0' }}>{t.nts}:</td><td style={{ padding: '4px 0' }}>{notes}</td></tr>}
             </tbody>
@@ -465,7 +491,7 @@ export default function ServiceRegistrationModule() {
                 return (
                   <tr key={idx}>
                     <td style={{ border: '1px solid #333', padding: 8, textAlign: 'center' }}>{idx + 1}</td>
-                    <td style={{ border: '1px solid #333', padding: 8, fontWeight: 'bold' }}>{item.serviceName}</td>
+                    <td style={{ border: '1px solid #333', padding: 8, fontWeight: 'bold' }}>{SERVICE_MAP[item.serviceName]?.[lang] || item.serviceName}</td>
                     <td style={{ border: '1px solid #333', padding: 8, textAlign: 'center' }}>{item.size}</td>
                     <td style={{ border: '1px solid #333', padding: 8, textAlign: 'center' }}>{s ? s.unit : '-'}</td>
                     <td style={{ border: '1px solid #333', padding: 8, textAlign: 'center', fontWeight: 'bold', color: '#d32f2f' }}>{item.quantity}</td>
