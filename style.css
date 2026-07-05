@@ -108,3 +108,43 @@ body {
     font-weight: bold;
     font-size: 1.2em;
 }
+
+/* ===== TABLE INPUT STYLES ===== */
+#items-table td {
+    vertical-align: middle;
+    padding: 6px 4px;
+}
+
+#items-table .product-select,
+#items-table .size-select,
+#items-table .qty-input,
+#items-table .manifest-input {
+    font-size: 13px;
+    padding: 4px 6px;
+    height: 32px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    width: 100%;
+    background-color: #fff;
+    box-sizing: border-box;
+    line-height: 1.4;
+}
+
+#items-table .product-select {
+    padding-right: 24px;
+}
+
+#items-table .size-select {
+    text-align: center;
+    padding-right: 20px;
+}
+
+#items-table .qty-input,
+#items-table .manifest-input {
+    text-align: center;
+}
+
+#items-table .total-display {
+    font-size: 14px;
+    font-weight: bold;
+}
